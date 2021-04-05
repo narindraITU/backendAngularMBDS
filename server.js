@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
 let eleves = require('./routes/eleves');
 let user = require('./routes/users');
+let matieres = require('./routes/matieres');
 let Usermiddleware = require('./middlewares/AuthGuard');
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -55,13 +56,16 @@ app.route(prefix + '/assignments')
   .post(Usermiddleware.validateToken,assignment.postAssignment)
   .put(Usermiddleware.validateToken,assignment.updateAssignment);
 
+app.route(prefix + '/matieres')
+    .get(Usermiddleware.validateToken,matieres.load)
+    .post(Usermiddleware.validateToken,matieres.create);
+
 app.route(prefix + '/eleves')
     .post(Usermiddleware.validateToken,eleves.create)
     .get(Usermiddleware.validateToken,eleves.load)
     .delete(Usermiddleware.validateToken,eleves.delete)
     .put(Usermiddleware.validateToken,eleves.update);
 
-app.route('/matieres');
 
 app.route(prefix + '/user/inscription')
     .post(user.inscription);

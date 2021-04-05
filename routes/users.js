@@ -30,6 +30,14 @@ const UserController = {
           res.status(500).send(utils.createError("Un problème est survenu durant l'enregistrement de l'utilisateur"));
       }
   },
+  update: async function(req,res){
+      try{
+          
+      }
+      catch (e) {
+          
+      }
+  },
   login: async function(req,res){
       try{
           console.log("ato e");

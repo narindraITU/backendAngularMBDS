@@ -14,9 +14,8 @@ const MatieresController = {
     create: async function(req,res){
         try{
             const result = await MatiereService
-                .create(req.body.image,
+                .create(req.file,
                     req.body.nom,
-                    req.body.nomMatiere,
                     req.body.icone,
                     req.body.nomProf);
             res.json({data: result});

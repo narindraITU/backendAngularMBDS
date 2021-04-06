@@ -7,6 +7,7 @@ let user = require('./routes/users');
 let matieres = require('./routes/matieres');
 let Usermiddleware = require('./middlewares/AuthGuard');
 let mongoose = require('mongoose');
+const multer = require('multer');
 mongoose.Promise = global.Promise;
 
 // remplacer toute cette chaine par l'URI de connexion à votre propre base dans le cloud s
@@ -56,16 +57,16 @@ app.route(prefix + '/assignments')
   .post(Usermiddleware.validateToken,assignment.postAssignment)
   .put(Usermiddleware.validateToken,assignment.updateAssignment);
 
+const fileUpload = multer();
 app.route(prefix + '/matieres')
     .get(Usermiddleware.validateToken,matieres.load)
-    .post(Usermiddleware.validateToken,matieres.create);
+    .post(Usermiddleware.validateToken,fileUpload.single('image'),matieres.create);
 
 app.route(prefix + '/eleves')
     .post(Usermiddleware.validateToken,eleves.create)
     .get(Usermiddleware.validateToken,eleves.load)
     .delete(Usermiddleware.validateToken,eleves.delete)
     .put(Usermiddleware.validateToken,eleves.update);
-
 
 app.route(prefix + '/user/inscription')
     .post(user.inscription);

@@ -11,6 +11,17 @@ const MatieresController = {
             res.json({message: e.message});
         }
     },
+    delete: async function(req,res){
+        try{
+            const resultats = await MatiereService.delete(req.query.id);
+            res.json({message: "La matière a été supprimée"});
+        }
+        catch (e) {
+            console.log(e);
+            res.status(500);
+            res.json({message: e.message});
+        }
+    },
     create: async function(req,res){
         try{
             const result = await MatiereService

@@ -4,6 +4,7 @@ const ElevesService = {
             return Eleves.create({
                 nom,
                 prenom,
+                dateCreated: new Date(),
             });
     },
     delete: (id) => {

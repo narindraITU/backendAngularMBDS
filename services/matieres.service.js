@@ -34,12 +34,16 @@ const MatieresService = {
                 iconeMatiere: icone,
                 nomProfesseur: nomProf,
                 imageProf: result.url,
+                dateCreated: new Date(),
             });
         }
         catch (e) {
             console.log(e);
             throw new Error("L'image n'a pas pu être uploadé");
         }
+    },
+    delete(id){
+        return Matieres.findByIdAndRemove(id);
     },
     load: function (page) {
         var aggregateQuery = Matieres.aggregate();

@@ -3,6 +3,7 @@ let app = express();
 let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
 let eleves = require('./routes/eleves');
+let dashboard = require('./routes/dashboard');
 let user = require('./routes/users');
 let matieres = require('./routes/matieres');
 let Usermiddleware = require('./middlewares/AuthGuard');
@@ -60,6 +61,7 @@ app.route(prefix + '/assignments')
 const fileUpload = multer();
 app.route(prefix + '/matieres')
     .get(Usermiddleware.validateToken,matieres.load)
+    .delete(Usermiddleware.validateToken,matieres.delete)
     .post(Usermiddleware.validateToken,fileUpload.single('image'),matieres.create);
 
 app.route(prefix + '/eleves')
@@ -67,6 +69,8 @@ app.route(prefix + '/eleves')
     .get(Usermiddleware.validateToken,eleves.load)
     .delete(Usermiddleware.validateToken,eleves.delete)
     .put(Usermiddleware.validateToken,eleves.update);
+
+app.get(prefix + '/dashboard/counts',Usermiddleware.validateToken,dashboard.getCounts);
 
 app.route(prefix + '/user/inscription')
     .post(user.inscription);

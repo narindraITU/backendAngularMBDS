@@ -7,6 +7,7 @@ const  MatiereSchema = Schema({
     iconeMatiere: String,
     nomProfesseur: String,
     imageProf: String,
+    dateCreated: Date,
 });
 MatiereSchema.plugin(aggregatePaginate);
 module.exports = mongoose.model('Matiere', MatiereSchema);

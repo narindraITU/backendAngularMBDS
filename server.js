@@ -64,11 +64,15 @@ app.route(prefix + '/matieres')
     .delete(Usermiddleware.validateToken,matieres.delete)
     .post(Usermiddleware.validateToken,fileUpload.single('image'),matieres.create);
 
+app.get(prefix + '/matieres/all', Usermiddleware.validateToken, matieres.loadAll);
+
 app.route(prefix + '/eleves')
     .post(Usermiddleware.validateToken,eleves.create)
     .get(Usermiddleware.validateToken,eleves.load)
     .delete(Usermiddleware.validateToken,eleves.delete)
     .put(Usermiddleware.validateToken,eleves.update);
+
+    app.get(prefix + '/eleves/all', Usermiddleware.validateToken, eleves.loadAll);
 
 app.get(prefix + '/dashboard/counts',Usermiddleware.validateToken,dashboard.getCounts);
 

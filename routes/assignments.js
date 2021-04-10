@@ -1,6 +1,6 @@
 let Assignment = require('../model/assignment');
-let MatieresController = require('../routes/matieres');
-let ElevesController = require('../routes/eleves');
+let MatieresService = require('../services/matieres.service');
+let ElevesService = require('../services/eleves.service');
 
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
@@ -35,29 +35,32 @@ async function getAssignment(req, res){
 }
 
 // Ajout d'un assignment (POST)
-function postAssignment(req, res){
-    let assignment = new Assignment();
-    assignment.nom = req.body.nom;
-    assignment.dateDeRendu = req.body.dateDeRendu;
-    assignment.rendu = req.body.rendu;
-    assignment.note = req.body.note;
-    assignment.remarques = req.body.remarques;
-
-    let idmatiere = req.body.idMatiere;
-    let ideleve = req.body.idEleve;
-    let matiere = MatieresController.findById(idmatiere);
-    let eleve = ElevesController.findById(ideleve);
-    assignment.matiere = matiere;
-    assignment.eleve = eleve;
-    console.log("POST assignment reçu :");
-    console.log(assignment);
-
-    assignment.save( (err) => {
-        if(err){
-            res.send('cant post assignment ', err);
-        }
-        res.json({ message: `${assignment.nom} saved!`})
-    })
+async function postAssignment(req, res){
+    try{
+        let assignment = new Assignment();
+        assignment.nom = req.body.nom;
+        assignment.dateDeRendu = req.body.dateDeRendu;
+        assignment.rendu = req.body.rendu;
+        assignment.note = req.body.note;
+        assignment.remarques = req.body.remarques;
+    
+        let idmatiere = req.body.idMatiere;
+        let ideleve = req.body.idEleve;
+        let matiere = await MatieresService.findById(idmatiere);
+        let eleve = await ElevesService.findById(ideleve);
+        assignment.matiere = matiere;
+        assignment.eleve = eleve;
+        console.log("POST assignment reçu :");
+        console.log(assignment);
+    
+        let resassignment = await assignment.save();
+        res.json({data: resassignment});
+    }
+    catch (e) {
+        console.log(e);
+        res.status(500);
+        res.json({message: e.message});
+    }    
 }
 
 // Update d'un assignment (PUT)

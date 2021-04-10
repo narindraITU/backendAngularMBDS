@@ -27,7 +27,7 @@ const ElevesService = {
         );
     },
     loadAll: function(){
-        return Eleves.find();
+        return Eleves.find({});
     },
     findById(id){
         return Eleves.findById(id);

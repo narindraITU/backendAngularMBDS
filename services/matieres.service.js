@@ -56,7 +56,7 @@ const MatieresService = {
         );
     },
     loadAll: function(){
-        return Matieres.find();
+        return Matieres.find({});
     },
     findById(id){
         return Matieres.findById(id);

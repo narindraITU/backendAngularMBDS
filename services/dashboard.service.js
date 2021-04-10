@@ -12,11 +12,16 @@ const DashboardService = {
     countMatieres(){
         return Matieres.countDocuments();
     },
+    countAssignmentsByRendu(isRendu){
+        return Assignments.countDocuments({rendu: isRendu});
+    },
     elevesParJour(){
         const aggregatorOpts = [
             {
                 $group: {
-                    dateCreated: { $dateToString: { format: "%Y-%m-%d", date: "$dateCreated" } },
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateCreated" } },
+                    },
                     count: { $sum: 1 }
                 }
             }
@@ -27,18 +32,36 @@ const DashboardService = {
         const aggregatorOpts = [
             {
                 $group: {
-                    dateCreated: { $dateToString: { format: "%Y-%m-%d", date: "$dateCreated" } },
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateCreated" } },
+                    },
                     count: { $sum: 1 }
                 }
             }
         ];
         return Matieres.aggregate(aggregatorOpts);
     },
-    assingmentsParJour(){
+    assignmentsParJour(){
         const aggregatorOpts = [
             {
                 $group: {
-                    dateCreated: { $dateToString: { format: "%Y-%m-%d", date: "$dateCreated" } },
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateDeRendu" } },
+                    },
+                    count: { $sum: 1 }
+                }
+            }
+        ];
+        return Assignments.aggregate(aggregatorOpts);
+    },
+    assignmentsParJourWithRenduFilter(rendu = false){
+        const aggregatorOpts = [
+            {$match: { rendu }},
+            {
+                $group: {
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateDeRendu" } },
+                    },
                     count: { $sum: 1 }
                 }
             }

@@ -71,7 +71,9 @@ app.route(prefix + '/eleves')
     .put(Usermiddleware.validateToken,eleves.update);
 
 app.get(prefix + '/dashboard/counts',Usermiddleware.validateToken,dashboard.getCounts);
-
+app.get(prefix + '/dashboard/stats_assignments',
+    Usermiddleware.validateToken,
+    dashboard.statistiquesAssignments);
 app.route(prefix + '/user/inscription')
     .post(user.inscription);
 

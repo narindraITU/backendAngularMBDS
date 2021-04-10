@@ -45,5 +45,27 @@ const ElevesController = {
             res.json({message: e.message});
         }
     },
+    findById: async function(req, res){
+        try{
+            const result = await ElevesService.findById(req.id);
+            res.json({data: result});
+        }
+        catch(e){
+            console.log(e);
+            res.status(500);
+            res.json({message: e.message});
+        }
+    },
+    loadAll: async function(req, res){
+        try{
+            const result = await ElevesService.loadAll();
+            res.json({data: result});
+        }
+        catch(e){
+            console.log(e);
+            res.status(500);
+            res.json({message: e.message});
+        }
+    },
 };
 module.exports = ElevesController;

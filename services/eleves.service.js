@@ -26,5 +26,11 @@ const ElevesService = {
             }
         );
     },
+    loadAll: function(){
+        return Eleves.find();
+    },
+    findById(id){
+        return Eleves.findById(id);
+    }
 };
 module.exports = ElevesService;

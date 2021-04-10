@@ -54,6 +54,12 @@ const MatieresService = {
                 limit: 10,
             }
         );
+    },
+    loadAll: function(){
+        return Matieres.find();
+    },
+    findById(id){
+        return Matieres.findById(id);
     }
 };
 module.exports = MatieresService;

@@ -6,8 +6,10 @@ let AssignmentSchema = Schema({
     dateDeRendu: Date,
     nom: String,
     rendu: Boolean,
-    matiere: {type: mongoose.Schema.Types, ref: 'Matiere'},
-    eleve: {type: mongoose.Schema.Types, ref: 'Eleves'}
+    matiere: Object,
+    eleve: Object,
+    note: Number,
+    remarques: String,
 });
 AssignmentSchema.plugin(aggregatePaginate);
 // C'est à travers ce modèle Mongoose qu'on pourra faire le CRUD

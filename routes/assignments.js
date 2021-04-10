@@ -1,4 +1,6 @@
 let Assignment = require('../model/assignment');
+let MatieresController = require('../routes/matieres');
+let ElevesController = require('../routes/eleves');
 
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
@@ -38,6 +40,15 @@ function postAssignment(req, res){
     assignment.nom = req.body.nom;
     assignment.dateDeRendu = req.body.dateDeRendu;
     assignment.rendu = req.body.rendu;
+    assignment.note = req.body.note;
+    assignment.remarques = req.body.remarques;
+
+    let idmatiere = req.body.idMatiere;
+    let ideleve = req.body.idEleve;
+    let matiere = MatieresController.findById(idmatiere);
+    let eleve = ElevesController.findById(ideleve);
+    assignment.matiere = matiere;
+    assignment.eleve = eleve;
     console.log("POST assignment reçu :");
     console.log(assignment);
 

@@ -55,8 +55,12 @@ app.route(prefix + '/assignments/:id')
   .delete(Usermiddleware.validateToken,assignment.deleteAssignment);
 
 app.route(prefix + '/assignments')
-  .post(Usermiddleware.validateToken,assignment.postAssignment)
-  .put(Usermiddleware.validateToken,assignment.updateAssignment);
+  .post(Usermiddleware.validateToken,
+      Usermiddleware.validateAdmin,
+      assignment.postAssignment)
+  .put(Usermiddleware.validateToken,
+      Usermiddleware.validateAdmin,
+      assignment.updateAssignment);
 
 const fileUpload = multer();
 app.route(prefix + '/matieres')

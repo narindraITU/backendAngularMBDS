@@ -28,6 +28,32 @@ const DashboardService = {
         ];
         return Eleves.aggregate(aggregatorOpts);
     },
+    assignmentsParAn(){
+        const aggregatorOpts = [
+            {
+                $group: {
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%Y", date: "$dateDeRendu" } },
+                    },
+                    count: { $sum: 1 }
+                }
+            }
+        ];
+        return Assignments.aggregate(aggregatorOpts);
+    },
+    assignmentsParMois(){
+        const aggregatorOpts = [
+            {
+                $group: {
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%m-%Y", date: "$dateDeRendu" } },
+                    },
+                    count: { $sum: 1 }
+                }
+            }
+        ];
+        return Assignments.aggregate(aggregatorOpts);
+    },
     matieresParJour(){
         const aggregatorOpts = [
             {

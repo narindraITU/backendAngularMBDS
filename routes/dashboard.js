@@ -31,12 +31,17 @@ const DashboardController = {
 
             const matieres_par_jour = await DashboardService.matieresParJour();
             const eleves_par_jour = await DashboardService.elevesParJour();
+
+            const assignments_mois = await DashboardService.assignmentsParMois();
+            const assignments_ans = await DashboardService.assignmentsParAn();
             res.json({
                stat_days,
                stat_days_rendu,
                stat_days_nonrendu,
                matieres_par_jour,
                eleves_par_jour,
+               assignments_mois,
+               assignments_ans,
             });
         }
         catch (e) {

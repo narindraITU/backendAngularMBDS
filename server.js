@@ -55,8 +55,12 @@ app.route(prefix + '/assignments/:id')
   .delete(Usermiddleware.validateToken,assignment.deleteAssignment);
 
 app.route(prefix + '/assignments')
-  .post(Usermiddleware.validateToken,assignment.postAssignment)
-  .put(Usermiddleware.validateToken,assignment.updateAssignment);
+  .post(Usermiddleware.validateToken,
+      Usermiddleware.validateAdmin,
+      assignment.postAssignment)
+  .put(Usermiddleware.validateToken,
+      Usermiddleware.validateAdmin,
+      assignment.updateAssignment);
 
 const fileUpload = multer();
 app.route(prefix + '/matieres')
@@ -72,6 +76,10 @@ app.route(prefix + '/eleves')
     .delete(Usermiddleware.validateToken,eleves.delete)
     .put(Usermiddleware.validateToken,eleves.update);
 
+app.get(prefix + '/dashboard/counts',Usermiddleware.validateToken,dashboard.getCounts);
+app.get(prefix + '/dashboard/stats_assignments',
+    Usermiddleware.validateToken,
+    dashboard.statistiquesAssignments);
     app.get(prefix + '/eleves/all', Usermiddleware.validateToken, eleves.loadAll);
 
 app.get(prefix + '/dashboard/counts',Usermiddleware.validateToken,dashboard.getCounts);

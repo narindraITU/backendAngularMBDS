@@ -19,10 +19,7 @@ const UserController = {
   },
   me: async function(req,res){
       try{
-          const user = await UserService.getUser(req.userId);
-          if(!user){
-              res.status(404).send(utils.createError("Utilisateur inexistant"));
-          }
+          const user = req.user;
           res.status(200).send(user);
       }
       catch (e) {
@@ -32,10 +29,10 @@ const UserController = {
   },
   update: async function(req,res){
       try{
-          
+
       }
       catch (e) {
-          
+
       }
   },
   login: async function(req,res){

@@ -12,33 +12,82 @@ const DashboardService = {
     countMatieres(){
         return Matieres.countDocuments();
     },
+    countAssignmentsByRendu(isRendu){
+        return Assignments.countDocuments({rendu: isRendu});
+    },
     elevesParJour(){
         const aggregatorOpts = [
             {
                 $group: {
-                    dateCreated: { $dateToString: { format: "%Y-%m-%d", date: "$dateCreated" } },
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateCreated" } },
+                    },
                     count: { $sum: 1 }
                 }
             }
         ];
         return Eleves.aggregate(aggregatorOpts);
     },
+    assignmentsParAn(){
+        const aggregatorOpts = [
+            {
+                $group: {
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%Y", date: "$dateDeRendu" } },
+                    },
+                    count: { $sum: 1 }
+                }
+            }
+        ];
+        return Assignments.aggregate(aggregatorOpts);
+    },
+    assignmentsParMois(){
+        const aggregatorOpts = [
+            {
+                $group: {
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%m-%Y", date: "$dateDeRendu" } },
+                    },
+                    count: { $sum: 1 }
+                }
+            }
+        ];
+        return Assignments.aggregate(aggregatorOpts);
+    },
     matieresParJour(){
         const aggregatorOpts = [
             {
                 $group: {
-                    dateCreated: { $dateToString: { format: "%Y-%m-%d", date: "$dateCreated" } },
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateCreated" } },
+                    },
                     count: { $sum: 1 }
                 }
             }
         ];
         return Matieres.aggregate(aggregatorOpts);
     },
-    assingmentsParJour(){
+    assignmentsParJour(){
         const aggregatorOpts = [
             {
                 $group: {
-                    dateCreated: { $dateToString: { format: "%Y-%m-%d", date: "$dateCreated" } },
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateDeRendu" } },
+                    },
+                    count: { $sum: 1 }
+                }
+            }
+        ];
+        return Assignments.aggregate(aggregatorOpts);
+    },
+    assignmentsParJourWithRenduFilter(rendu = false){
+        const aggregatorOpts = [
+            {$match: { rendu }},
+            {
+                $group: {
+                    _id: {
+                        dateCreated: { $dateToString: { format: "%d-%m-%Y", date: "$dateDeRendu" } },
+                    },
                     count: { $sum: 1 }
                 }
             }

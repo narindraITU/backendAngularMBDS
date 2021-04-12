@@ -48,14 +48,8 @@ const UserService = {
             throw e;
         }
     },
-    getUser: async function (id) {
-        try {
-            const user = await User.findById(id, {password: 0});
-            return user;
-        } catch (e) {
-            console.log(e);
-            throw e;
-        }
+    getUser: function (id) {
+            return User.findById(id, {password: 0});
     },
 };
 module.exports = UserService;

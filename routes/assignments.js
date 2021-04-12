@@ -1,6 +1,7 @@
 let Assignment = require('../model/assignment');
 let MatieresService = require('../services/matieres.service');
 let ElevesService = require('../services/eleves.service');
+let AssignmentService = require('../services/assignments.service');
 
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
@@ -64,16 +65,33 @@ async function postAssignment(req, res){
 }
 
 // Update d'un assignment (PUT)
-function updateAssignment(req, res) {
-    Assignment.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, assignment) => {
-        if (err) {
-            console.log(err);
-            res.send(err)
-        } else {
-          res.json({message: 'updated'})
-        }
-      // console.log('updated ', assignment)
-    });
+async function updateAssignment(req, res) {
+    try{
+        let updatedAssignment = await Assignment.findById(req.body._id);
+        updatedAssignment.nom = req.body.nom;
+        updatedAssignment.dateDeRendu = req.body.dateDeRendu;
+        updatedAssignment.rendu = req.body.rendu;
+        updatedAssignment.note = req.body.note;
+        updatedAssignment.remarques = req.body.remarques;
+    
+        let idmatiere = req.body.idMatiere;
+        let ideleve = req.body.idEleve;
+        let matiere = await MatieresService.findById(idmatiere);
+        let eleve = await ElevesService.findById(ideleve);
+        updatedAssignment.matiere = matiere;
+        updatedAssignment.eleve = eleve;
+        console.log("POST updatedAssignment reçu :");
+        console.log(updatedAssignment);
+        
+        let result = await Assignment.findByIdAndUpdate(req.body._id, updatedAssignment);
+
+        res.json({data: result});
+    }
+    catch (e) {
+        console.log(e);
+        res.status(500);
+        res.json({message: e.message});
+    }   
 }
 
 // suppression d'un assignment (DELETE)

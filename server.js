@@ -52,7 +52,13 @@ app.route(prefix + '/assignments')
 
 app.route(prefix + '/assignments/:id')
   .get(Usermiddleware.validateToken,assignment.getAssignment)
-  .delete(Usermiddleware.validateToken,assignment.deleteAssignment);
+  .delete(Usermiddleware.validateToken,
+      Usermiddleware.validateAdmin,
+      assignment.deleteAssignment);
+
+app.post(prefix + '/assignments/rendre',
+    Usermiddleware.validateToken,
+    assignment.rendre);
 
 app.route(prefix + '/assignments')
   .post(Usermiddleware.validateToken,

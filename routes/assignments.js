@@ -1,10 +1,14 @@
 let Assignment = require('../model/assignment');
+let AssignmentService = require('../services/assignments.service');
 let MatieresService = require('../services/matieres.service');
 let ElevesService = require('../services/eleves.service');
+const NotFoundException = require('../Exceptions/NotFoundException');
+const DejaRenduException = require('../Exceptions/DejaRenduException');
 
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
-    var aggregateQuery = Assignment.aggregate();
+    const isRendu = req.query.rendu === "true" ? true : false;
+    var aggregateQuery = Assignment.aggregate([{ $match: { rendu: isRendu }}]);
     Assignment.aggregatePaginate(
         aggregateQuery,
         {
@@ -43,7 +47,7 @@ async function postAssignment(req, res){
         assignment.rendu = req.body.rendu;
         assignment.note = req.body.note;
         assignment.remarques = req.body.remarques;
-    
+
         let idmatiere = req.body.idMatiere;
         let ideleve = req.body.idEleve;
         let matiere = await MatieresService.findById(idmatiere);
@@ -52,7 +56,7 @@ async function postAssignment(req, res){
         assignment.eleve = eleve;
         console.log("POST assignment reçu :");
         console.log(assignment);
-    
+
         let resassignment = await assignment.save();
         res.json({data: resassignment});
     }
@@ -60,7 +64,7 @@ async function postAssignment(req, res){
         console.log(e);
         res.status(500);
         res.json({message: e.message});
-    }    
+    }
 }
 
 // Update d'un assignment (PUT)
@@ -85,7 +89,19 @@ function deleteAssignment(req, res) {
         res.json({message: `${assignment.nom} deleted`});
     })
 }
+async function rendre(req,res){
+    try{
+        const resultat = await AssignmentService.rendre(req.body.id,req.body.note,req.body.description);
+        res.json(resultat);
+    }
+    catch (e) {
+        res.status(500);
+        if(e instanceof NotFoundException){
+            res.status(404);
+        }
+        res.json(e.message);
+    }
+}
 
 
-
-module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment };
+module.exports = {rendre,getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment };

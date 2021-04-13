@@ -1,4 +1,6 @@
 let Eleves = require('../model/eleves');
+let AssignmentService = require('../services/assignments.service');
+
 const ElevesService = {
     create: (nom,prenom) => {
             return Eleves.create({
@@ -7,8 +9,10 @@ const ElevesService = {
                 dateCreated: new Date(),
             });
     },
-    delete: (id) => {
-            return Eleves.findByIdAndRemove(id);
+     delete: async (id) => {
+       const result =  await AssignmentService.deleteToCorrespondingEleve(id);
+       console.log(result);
+        return Eleves.findByIdAndRemove(id);
     },
     update: (nom,prenom,id) => {
         return Eleves.findByIdAndUpdate(id, {

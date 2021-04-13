@@ -16,6 +16,27 @@ const AssignmentsService = {
         assignment.dateDeRendu = new Date();
         const resultat = await Assignment.findByIdAndUpdate(id, assignment);
         return resultat;
+    },
+    deleteToCorrespondingMatiere(id){
+        return Assignment.deleteMany({
+            matiere: {
+                _id: id
+            }
+        });
+    },
+    async deleteToCorrespondingEleve(id){
+        return Assignment.deleteMany({
+            "eleve._id":id,
+        });
+    },
+    async annulerRendre(id){
+        const assignment = await Assignment.findById(id);
+        if(!assignment){
+            throw new NotFoundException(`ce devoir n'existe pas`);
+        }
+        assignment.rendu = false;
+        const resultat = await Assignment.findByIdAndUpdate(id, assignment);
+        return resultat;
     }
 };
 module.exports = AssignmentsService;

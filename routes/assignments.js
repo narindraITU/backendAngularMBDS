@@ -102,6 +102,25 @@ async function rendre(req,res){
         res.json(e.message);
     }
 }
+async function annulerRendre(req,res){
+    try{
+        const resultat = await AssignmentService.annulerRendre(req.body.id);
+        res.json(resultat);
+    }
+    catch (e) {
+        res.status(500);
+        if(e instanceof NotFoundException){
+            res.status(404);
+        }
+        res.json(e.message);
+    }
+}
 
 
-module.exports = {rendre,getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment };
+module.exports = {rendre,
+    annulerRendre,
+    getAssignments,
+    postAssignment,
+    getAssignment,
+    updateAssignment,
+    deleteAssignment };

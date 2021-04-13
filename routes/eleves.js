@@ -1,5 +1,4 @@
 let ElevesService = require('../services/eleves.service');
-
 const ElevesController = {
     load: async function(req,res){
         try{

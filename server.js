@@ -60,6 +60,10 @@ app.post(prefix + '/assignments/rendre',
     Usermiddleware.validateToken,
     assignment.rendre);
 
+app.post(prefix + '/assignments/annuler/rendre',
+    Usermiddleware.validateToken,
+    assignment.annulerRendre);
+
 app.route(prefix + '/assignments')
   .post(Usermiddleware.validateToken,
       Usermiddleware.validateAdmin,
@@ -71,16 +75,16 @@ app.route(prefix + '/assignments')
 const fileUpload = multer();
 app.route(prefix + '/matieres')
     .get(Usermiddleware.validateToken,matieres.load)
-    .delete(Usermiddleware.validateToken,matieres.delete)
-    .post(Usermiddleware.validateToken,fileUpload.single('image'),matieres.create);
+    .delete(Usermiddleware.validateToken,Usermiddleware.validateAdmin,matieres.delete)
+    .post(Usermiddleware.validateToken,Usermiddleware.validateAdmin,fileUpload.single('image'),matieres.create);
 
 app.get(prefix + '/matieres/all', Usermiddleware.validateToken, matieres.loadAll);
 
 app.route(prefix + '/eleves')
     .post(Usermiddleware.validateToken,eleves.create)
     .get(Usermiddleware.validateToken,eleves.load)
-    .delete(Usermiddleware.validateToken,eleves.delete)
-    .put(Usermiddleware.validateToken,eleves.update);
+    .delete(Usermiddleware.validateToken,Usermiddleware.validateAdmin,eleves.delete)
+    .put(Usermiddleware.validateToken,Usermiddleware.validateAdmin,eleves.update);
 
 app.get(prefix + '/dashboard/counts',Usermiddleware.validateToken,dashboard.getCounts);
 app.get(prefix + '/dashboard/stats_assignments',

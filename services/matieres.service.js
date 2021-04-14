@@ -1,6 +1,7 @@
 let Matieres = require('../model/matiere');
 const cloudinary = require("cloudinary").v2;
 const configurations = require("../configurations/config");
+const AssignmentService = require('../services/assignments.service');
 const DatauriParser = require('datauri/parser');
 const moment = require("moment");
 const streamifier = require('streamifier');
@@ -42,7 +43,8 @@ const MatieresService = {
             throw new Error("L'image n'a pas pu être uploadé");
         }
     },
-    delete(id){
+    async delete(id){
+        await AssignmentService.deleteToCorrespondingMatiere(id);
         return Matieres.findByIdAndRemove(id);
     },
     load: function (page) {

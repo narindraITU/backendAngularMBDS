@@ -47,6 +47,9 @@ let port = process.env.PORT || 8010;
 // les routes
 const prefix = '/api';
 
+app.get(prefix + '/assignments/byEleves',Usermiddleware.validateToken,assignment.findByEleves);
+
+
 app.route(prefix + '/assignments')
   .get(Usermiddleware.validateToken,assignment.getAssignments);
 
@@ -55,15 +58,12 @@ app.route(prefix + '/assignments/:id')
   .delete(Usermiddleware.validateToken,
       Usermiddleware.validateAdmin,
       assignment.deleteAssignment);
-
 app.post(prefix + '/assignments/rendre',
     Usermiddleware.validateToken,
     assignment.rendre);
-
 app.post(prefix + '/assignments/annuler/rendre',
     Usermiddleware.validateToken,
     assignment.annulerRendre);
-
 app.route(prefix + '/assignments')
   .post(Usermiddleware.validateToken,
       Usermiddleware.validateAdmin,
@@ -77,7 +77,6 @@ app.route(prefix + '/matieres')
     .get(Usermiddleware.validateToken,matieres.load)
     .delete(Usermiddleware.validateToken,Usermiddleware.validateAdmin,matieres.delete)
     .post(Usermiddleware.validateToken,Usermiddleware.validateAdmin,fileUpload.single('image'),matieres.create);
-
 app.get(prefix + '/matieres/all', Usermiddleware.validateToken, matieres.loadAll);
 
 app.route(prefix + '/eleves')
@@ -91,7 +90,6 @@ app.get(prefix + '/dashboard/stats_assignments',
     Usermiddleware.validateToken,
     dashboard.statistiquesAssignments);
     app.get(prefix + '/eleves/all', Usermiddleware.validateToken, eleves.loadAll);
-
 app.get(prefix + '/dashboard/counts',Usermiddleware.validateToken,dashboard.getCounts);
 
 app.route(prefix + '/user/inscription')

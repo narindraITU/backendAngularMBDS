@@ -1,6 +1,7 @@
 const Assignment = require('../model/assignment');
 const NotFoundException = require('../Exceptions/NotFoundException');
 const DejaRenduException = require('../Exceptions/DejaRenduException');
+var ObjectId = require('mongoose').Types.ObjectId;
 const AssignmentsService = {
     async rendre(id,note,description){
         const assignment = await Assignment.findById(id);
@@ -17,16 +18,29 @@ const AssignmentsService = {
         const resultat = await Assignment.findByIdAndUpdate(id, assignment);
         return resultat;
     },
-    deleteToCorrespondingMatiere(id){
-        return Assignment.deleteMany({
-            matiere: {
-                _id: id
+    searchByEleve(page,idEleve){
+        var aggregateQuery = Assignment.aggregate([
+            {$match: {'eleve._id': new ObjectId(idEleve)}}
+        ]);
+
+        console.log(idEleve,aggregateQuery);
+        return Assignment.aggregatePaginate(
+            aggregateQuery,
+            {
+                page: parseInt(page) || 1,
+                limit: 10,
             }
-        });
+        );
+    },
+    deleteToCorrespondingMatiere(id){
+        return Assignment.deleteMany({'matiere._id': new ObjectId(id)});
+    },
+    updateToCorrespondingEleve(id,newEleve){
+        return Assignment.updateMany({'eleve._id': new ObjectId(id)}, { $set: { "eleve" : newEleve } });
     },
     async deleteToCorrespondingEleve(id){
         return Assignment.deleteMany({
-            "eleve._id":id,
+            "eleve._id":new ObjectId(id),
         });
     },
     async annulerRendre(id){

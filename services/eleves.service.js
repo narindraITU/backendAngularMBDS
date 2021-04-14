@@ -11,14 +11,17 @@ const ElevesService = {
     },
      delete: async (id) => {
        const result =  await AssignmentService.deleteToCorrespondingEleve(id);
-       console.log(result);
-        return Eleves.findByIdAndRemove(id);
+       return Eleves.findByIdAndRemove(id);
     },
-    update: (nom,prenom,id) => {
-        return Eleves.findByIdAndUpdate(id, {
+    update: async (nom,prenom,id) => {
+        let newEleve = await Eleves.findByIdAndUpdate(id, {
             nom,
             prenom
         });
+        newEleve = await Eleves.findById(id);
+        const resultat = await  AssignmentService.updateToCorrespondingEleve(id,newEleve);
+        console.log(resultat);
+        return resultat;
     },
     load: (page) => {
         var aggregateQuery = Eleves.aggregate();

@@ -1,7 +1,6 @@
 const Assignment = require('../model/assignment');
 const NotFoundException = require('../Exceptions/NotFoundException');
 const MatiereService = require('../services/matieres.service');
-const EleveService = require('../services/eleves.service');
 const DejaRenduException = require('../Exceptions/DejaRenduException');
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -12,6 +11,25 @@ function getRandomInt(min, max) {
 }
 
 const AssignmentsService = {
+    search(page,rendu,tableau_eleves,tableau_matieres){
+        const criterias = { rendu: rendu };
+        if(tableau_eleves.length!=0){
+            tableau_eleves = tableau_eleves.map(value => new ObjectId(value));
+            criterias["eleve._id"] = { "$in": tableau_eleves };
+        }
+        if(tableau_matieres.length!=0){
+            tableau_matieres = tableau_matieres.map(value => new ObjectId(value));
+            criterias["matiere._id"] = { "$in": tableau_matieres };
+        }
+        var aggregateQuery = Assignment.aggregate( [ { $match: criterias}]);
+        return Assignment.aggregatePaginate(
+            aggregateQuery,
+            {
+                page: parseInt(page) || 1,
+                limit: 10,
+            }
+        );
+    },
     async peupler(body){
         let assignment = new Assignment();
         assignment.nom = body.nom;

@@ -7,23 +7,20 @@ const DejaRenduException = require('../Exceptions/DejaRenduException');
 
 const AssignmentController = {
     // Récupérer tous les assignments (GET)
-    getAssignments: function (req, res){
-    const isRendu = req.query.rendu === "true" ? true : false;
-    var aggregateQuery = Assignment.aggregate([{ $match: { rendu: isRendu }}]);
-    Assignment.aggregatePaginate(
-        aggregateQuery,
-        {
-            page: parseInt(req.query.page) || 1,
-            limit: 10,
-        },
-        (err, assignments) => {
-            if (err) {
-                res.send(err);
-            }
-            res.send(assignments);
+    getAssignments: async function (req, res){
+        try{
+            const tableau_matieres = req.query.matieres!="null" ? req.query.matieres.split('|') : [];
+            const tableau_eleves = req.query.eleves!="null" ? req.query.eleves.split('|') : [];
+            const result = await AssignmentService.search(req.query.page,
+                req.query.rendu === "true",tableau_eleves,tableau_matieres);
+            res.json(result);
         }
-    );
-},
+        catch (e) {
+            console.log(e);
+            res.status(500);
+            res.json(e.message);
+        }
+    },
     // Récupérer un assignment par son id (GET)
     getAssignment: async function (req, res){
         let assignmentId = req.params.id;

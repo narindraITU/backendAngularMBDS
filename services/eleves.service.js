@@ -9,6 +9,19 @@ const ElevesService = {
                 dateCreated: new Date(),
             });
     },
+    searchByEleve(page,idEleve){
+        var aggregateQuery = Assignment.aggregate([
+            {$match: {'eleve._id': new ObjectId(idEleve)}}
+        ]);
+        console.log(idEleve,aggregateQuery);
+        return Assignment.aggregatePaginate(
+            aggregateQuery,
+            {
+                page: parseInt(page) || 1,
+                limit: 10,
+            }
+        );
+    },
      delete: async (id) => {
        const result =  await AssignmentService.deleteToCorrespondingEleve(id);
        return Eleves.findByIdAndRemove(id);
@@ -19,7 +32,7 @@ const ElevesService = {
             prenom
         });
         newEleve = await Eleves.findById(id);
-        const resultat = await  AssignmentService.updateToCorrespondingEleve(id,newEleve);
+        const resultat = await AssignmentService.updateToCorrespondingEleve(id,newEleve);
         console.log(resultat);
         return resultat;
     },

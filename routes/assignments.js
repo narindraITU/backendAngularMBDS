@@ -37,6 +37,16 @@ const AssignmentController = {
             res.send(err);
         }
     },
+    async peupler(req,res){
+        try{
+            const result = await AssignmentService.peupler(req.body);
+            res.json(result);
+        }
+        catch (e) {
+            console.log(e);
+            res.send(e.message);
+        }
+    },
     // Ajout d'un assignment (POST)
     postAssignment: async function (req, res){
         try{

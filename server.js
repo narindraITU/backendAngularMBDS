@@ -47,11 +47,14 @@ let port = process.env.PORT || 8010;
 // les routes
 const prefix = '/api';
 
+app.post(prefix + '/assignments/peupler',Usermiddleware.validateToken,assignment.peupler);
 app.get(prefix + '/assignments/byEleves',Usermiddleware.validateToken,assignment.findByEleves);
 
 
 app.route(prefix + '/assignments')
   .get(Usermiddleware.validateToken,assignment.getAssignments);
+
+
 
 app.route(prefix + '/assignments/:id')
   .get(Usermiddleware.validateToken,assignment.getAssignment)

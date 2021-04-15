@@ -1,7 +1,10 @@
 <h1>Assignment App by Mathias et Narindra - section backend</h1>
 <strong>url : https://frontmbds2021angular.herokuapp.com/</strong>
 <hr>
+    <p>Pour lancer il suffit de faire npm install puis npm start</p>
+<hr>
 <h3>Fonctionnalités clés</h3>
+<li>Pour lancer il suffit de faire npm install puis ng serve</li>
 <ul>
     <li>Upload des fichiers vers cloudinary (un cdn - https://cloudinary.com/) dans le cadre de l'ajout des matières (photo du prof) afin d'obtenir après un lien pour référencer les images au niveau de l'affichage</li>
     <li>Ajout d'une collection user pour les utilisateurs (dans le dossier model ) , de la validation des token avant chaque requête  , de la gestion du rôle administrateur au niveau du serveur grâce au middleware middlewares/AuthGuard</li>
